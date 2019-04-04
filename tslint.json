@@ -1,0 +1,25 @@
+{
+  "extends": "tslint-config-airbnb",
+  "rules": {
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "import-name": [
+      false
+    ],
+    "object-shorthand-properties-first": [
+      false
+    ],
+    "ter-indent": [
+      false
+    ],
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import |^export {(.*?)}|class [a-zA-Z]+ implements |// "
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+coverage/
+test/
+build/
+.idea/
+.editorconfig
+.gitignore
+.huskyrc
+commitlint.config.js
+jest.config.js
+.nvmrc
+tsconfig.json
+tslint.json
+*.tgz
