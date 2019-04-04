@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/sumcumo/vue-models.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-models)
+
 # VueModels
 *VueModels is a state management system for Vue.js.*
 
