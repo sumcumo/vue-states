@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/sumcumo/vue-models.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-models)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/maintainability)](https://codeclimate.com/github/sumcumo/vue-models/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/test_coverage)](https://codeclimate.com/github/sumcumo/vue-models/test_coverage)
 
 # VueModels
 *VueModels is a state management system for Vue.js.*

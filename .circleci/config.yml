@@ -28,7 +28,9 @@ jobs:
           keys:
             - v1-npm-{{ checksum "package-lock.json" }}
             - v1-npm-
-      - run: npm ci
+      - run:
+          name: Install
+          command: npm ci
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -43,29 +45,47 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: npm audit
+      - run:
+          name: Audit
+          command: npm audit
 
   lint:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: npm run lint
+      - run:
+          name: Lint
+          command: npm run lint
 
   test:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: npm run test.coverage
-      - run: ./node_modules/.bin/codecov
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            # download test reporter as a static binary
+                     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                     chmod +x ./cc-test-reporter
+      - run:
+          name: Run tests
+          command: |
+            # notify Code Climate of a pending test report using `before-build`
+            ./cc-test-reporter before-build
+            npm run test.coverage
+            # upload test report to Code Climate using `after-build`
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
 
   build:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: npm run build
+      - run:
+          name: Build from source
+          command: npm run build
 
 workflows:
   version: 2
