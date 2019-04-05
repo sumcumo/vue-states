@@ -1,16 +1,16 @@
 import {
+  ComponentOptions,
+  VueConstructor,
+} from 'vue'
+import { Vue } from 'vue/types/vue'
+import Registry from './registry'
+import {
   ModelInstallOptions,
   VueModel,
   VueModelOptions,
   VueModelOptionsFinal,
   VueModelProvided,
 } from './types'
-import Registry from './registry'
-import {
-  ComponentOptions,
-  VueConstructor,
-} from 'vue'
-import { Vue } from 'vue/types/vue'
 
 export { Registry }
 
@@ -66,6 +66,42 @@ const OPTIONS_DEFAULTS: ModelInstallOptions = {
   globalModels: {},
 }
 
+function createModels(this: VueModelProvided, vue: VueConstructor, installOptions: ModelInstallOptions) {
+  this.$modelsProvided = {}
+
+  if (!this.$options.models && this !== this.$root) {
+    return
+  }
+
+  let { models = {} } = this.$options
+
+  if (typeof models === 'function') {
+    models = models.call(this)
+  }
+
+  if (this === this.$root) {
+    const globalModels = installOptions.globalModels
+    Object.values(globalModels).forEach(m => m.modelId = 'global')
+    models = Object.assign({}, globalModels, models)
+  }
+
+  this.$modelsProvidedKeys = Object.keys(models)
+
+  Object
+    .entries(models)
+    .map(([key, options]) => {
+      const vm = new vue(createModel(this, key, options, installOptions.mixins)) as VueModel
+
+      (this as any)[key] = this.$modelsProvided[key] = vm
+      this.$modelRegistry.register(vm)
+
+      this.$on('hook:beforeDestroy', () => {
+        this.$modelRegistry.unregister(vm)
+        vm.$destroy()
+      })
+    })
+}
+
 export default {
   install(
     vue: VueConstructor,
@@ -87,39 +123,7 @@ export default {
         }
       },
       created(this: VueModelProvided) {
-        this.$modelsProvided = {}
-
-        if (!this.$options.models && this !== this.$root) {
-          return
-        }
-
-        let { models = {} } = this.$options
-
-        if (typeof models === 'function') {
-          models = models.call(this)
-        }
-
-        if (this === this.$root) {
-          const globalModels = installOptions.globalModels
-          Object.values(globalModels).forEach(m => m.modelId = 'global')
-          models = Object.assign({}, globalModels, models)
-        }
-
-        this.$modelsProvidedKeys = Object.keys(models)
-
-        Object
-          .entries(models)
-          .map(([key, options]) => {
-            const vm = new vue(createModel(this, key, options, installOptions.mixins)) as VueModel
-
-            (this as any)[key] = this.$modelsProvided[key] = vm
-            this.$modelRegistry.register(vm)
-
-            this.$on('hook:beforeDestroy', () => {
-              this.$modelRegistry.unregister(vm)
-              vm.$destroy()
-            })
-          })
+        createModels.call(this, vue, installOptions)
       },
     })
   },
