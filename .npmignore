@@ -12,3 +12,4 @@ jest.config.js
 tsconfig.json
 tslint.json
 *.tgz
+.circleci/
