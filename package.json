@@ -31,8 +31,7 @@
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "generate": "npm run test.coverage && npm run lint && npm run build",
-    "prepack": "npm run generate",
-    "prepublishOnly": "npm run generate"
+    "prepack": "npm run generate"
   },
   "author": "sum.cumo GmbH",
   "license": "Apache-2.0",
