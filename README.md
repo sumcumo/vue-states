@@ -149,8 +149,8 @@ a package that was developed alongside VueModels but not only works for models b
 After installing VueHistory you can enable it for all models by setting the `history: true` option:
 
 ```javascript
-import VueHistory from 'vue-history'
-import VueModels from 'vue-models'
+import VueHistory from '@sum.cumo/vue-history'
+import VueModels from '@sum.cumo/vue-models'
 
 Vue.use(VueHistory)
 
@@ -193,12 +193,12 @@ Object.defineProperty(context, 'vueModelState', {
 
 ```javascript
 // main.js
-import { ModelRegistry } from 'vue-models'
+import { Registry } from '@sum.cumo/vue-models'
 
 export default async function createApp() {
   // ...
   
-  const modelRegistry = new ModelRegistry()
+  const modelRegistry = new Registry()
 
   if (typeof window !== 'undefined' && window.__VUE_MODELS_STATE__) {
     modelRegistry.importState(window.__VUE_MODELS_STATE__)
