@@ -70,7 +70,7 @@ const consumerComponent = {
   },
 }
 
-describe('vue-models', async () => {
+describe('vue-models', () => {
   let wrapper: any
 
   let mockError: jest.Mock<any>
