@@ -8,12 +8,11 @@
 
 You might want to choose to use VueModels for:
 
-- **simplicity** <br />no `.state.foo`, `.getters.foo`, `.commit('changeFoo', 'bar')`, `.dispatch('changeFoo', 'bar')`, <br />just `State.foo` and `State.changeFoo('bar')`
-- **flexible scope**<br />its made to support global and local state, even in combination with SSR or localStorage
-- **learning curve & refactoring**<br />store modules = vue components => almost no new APIs and patterns to learn, seamless refactoring of mixins and components
-- **unlimited power**<br />as VueModels are just Vue components, that become part of the tree, all plugins are accessible by default (`this.$router`, `this.$apollo`, ...)
-- **[history](#history)**<br />in combination with [vue-history](https://github.com/sumcumo/vue-history) you get a comprehensive view of what's going on
-- **[hot-module-replacement](#installation)**<br />models can preserve their state when beeing replaced
+- **SIMPLICITY** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
+- **FLEXIBLE SCOPE**<br />It is designed to support application-wide and local state, and can still be hydrated from  SSR or localStorage.
+- **LEARNING & REFACTORING**<br />The state is composed of Vue components. That means: almost no new APIs and patterns to learn, plus seamless refactoring of your application.
+- **POWER**<br />All plugins and native Vue capabilities are accessible by design, without any configuration ( `this.$router, this.$apollo, created()...` ).
+- **[HISTORY](#history)**<br />In combination with [VueHistory](https://github.com/sumcumo/vue-history) you get a detailed view of what's going on, even for complex scenarios, async processes, error tracking and deeply nested call chains.
 
 *This package was released just recently. Feedback is highly welcome.*
 
