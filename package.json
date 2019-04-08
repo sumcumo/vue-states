@@ -23,7 +23,7 @@
   "scripts": {
     "test": "jest --coverage=false",
     "test.coverage": "jest",
-    "release": "standard-version && git push --follow-tags origin master",
+    "release": "git checkout master && git pull origin master && standard-version && git push --follow-tags origin master",
     "lint": "tslint -p ./tsconfig.base.json",
     "build": "npm run build:clear && tsc && npm run build:browser && npm run build:es && npm run build:umd",
     "build:clear": "rm -rf ./dist",
