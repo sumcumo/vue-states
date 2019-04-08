@@ -1,18 +1,18 @@
 [![CircleCI](https://circleci.com/gh/sumcumo/vue-models.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-models)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/maintainability)](https://codeclimate.com/github/sumcumo/vue-models/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/test_coverage)](https://codeclimate.com/github/sumcumo/vue-models/test_coverage)
+[![Depfu](https://badges.depfu.com/badges/5ffd662e83d120e5a968aba1b70bfeef/count.svg)](https://depfu.com/github/sumcumo/vue-models?project_id=7633)
 
 # VueModels
 *VueModels is a state management system for Vue.js.*
 
 You might want to choose to use VueModels for:
 
-- **simplicity** <br />no `.state.foo`, `.getters.foo`, `.commit('changeFoo', 'bar')`, `.dispatch('changeFoo', 'bar')`, <br />just `State.foo` and `State.changeFoo('bar')`
-- **flexible scope**<br />its made to support global and local state, even in combination with SSR or localStorage
-- **learning curve & refactoring**<br />store modules = vue components => almost no new APIs and patterns to learn, seamless refactoring of mixins and components
-- **unlimited power**<br />as VueModels are just Vue components, that become part of the tree, all plugins are accessible by default (`this.$router`, `this.$apollo`, ...)
-- **[history](#history)**<br />in combination with [vue-history](https://github.com/sumcumo/vue-history) you get a comprehensive view of what's going on
-- **[hot-module-replacement](#installation)**<br />models can preserve their state when beeing replaced
+- **SIMPLICITY** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
+- **FLEXIBLE SCOPE**<br />It is designed to support application-wide and local state, and can still be hydrated from  SSR or localStorage.
+- **LEARNING & REFACTORING**<br />The state is composed of Vue components. That means: almost no new APIs and patterns to learn, plus seamless refactoring of your application.
+- **POWER**<br />All plugins and native Vue capabilities are accessible by design, without any configuration ( `this.$router, this.$apollo, created()...` ).
+- **[HISTORY](#history)**<br />In combination with [VueHistory](https://github.com/sumcumo/vue-history) you get a detailed view of what's going on, even for complex scenarios, async processes, error tracking and deeply nested call chains.
 
 *This package was released just recently. Feedback is highly welcome.*
 
@@ -149,8 +149,8 @@ a package that was developed alongside VueModels but not only works for models b
 After installing VueHistory you can enable it for all models by setting the `history: true` option:
 
 ```javascript
-import VueHistory from 'vue-history'
-import VueModels from 'vue-models'
+import VueHistory from '@sum.cumo/vue-history'
+import VueModels from '@sum.cumo/vue-models'
 
 Vue.use(VueHistory)
 
@@ -193,12 +193,12 @@ Object.defineProperty(context, 'vueModelState', {
 
 ```javascript
 // main.js
-import { ModelRegistry } from 'vue-models'
+import { Registry } from '@sum.cumo/vue-models'
 
 export default async function createApp() {
   // ...
   
-  const modelRegistry = new ModelRegistry()
+  const modelRegistry = new Registry()
 
   if (typeof window !== 'undefined' && window.__VUE_MODELS_STATE__) {
     modelRegistry.importState(window.__VUE_MODELS_STATE__)
