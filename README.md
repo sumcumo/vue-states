@@ -1,3 +1,7 @@
+[![CircleCI](https://circleci.com/gh/sumcumo/vue-states.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-states)
+[![Maintainability](https://api.codeclimate.com/v1/badges/635869dc6220b29b1aa6/maintainability)](https://codeclimate.com/github/sumcumo/vue-states/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/635869dc6220b29b1aa6/test_coverage)](https://codeclimate.com/github/sumcumo/vue-states/test_coverage)
+
 # Vue States
 *Vue States is a state management system for Vue.js.*
 
