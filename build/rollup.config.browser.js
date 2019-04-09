@@ -4,9 +4,9 @@ import { minify } from 'uglify-es'
 
 const config = Object.assign({}, base, {
   output: {
-    file: 'dist/vue-models.min.js',
+    file: 'dist/vue-states.min.js',
     format: 'iife',
-    name: 'VueModels',
+    name: 'VueStates',
   },
 })
 
