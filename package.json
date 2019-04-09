@@ -6,6 +6,19 @@
   "module": "dist/vue-models.esm.js",
   "unpkg": "dist/vue-models.min.js",
   "typings": "dist/ems/index.d.ts",
+  "scripts": {
+    "test": "jest --coverage=false",
+    "test.coverage": "jest",
+    "release": "git checkout master && git pull origin master && standard-version && git push --follow-tags origin master",
+    "lint": "tslint -p ./tsconfig.base.json",
+    "build": "npm run build:clear && tsc && npm run build:browser && npm run build:es && npm run build:umd",
+    "build:clear": "rm -rf ./dist",
+    "build:browser": "rollup --config build/rollup.config.browser.js",
+    "build:es": "rollup --config build/rollup.config.es.js",
+    "build:umd": "rollup --config build/rollup.config.umd.js",
+    "generate": "npm run test.coverage && npm run lint && npm run build",
+    "prepack": "npm run generate"
+  },
   "author": "sum.cumo GmbH",
   "license": "Apache-2.0",
   "devDependencies": {
