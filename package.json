@@ -1,10 +1,10 @@
 {
-  "name": "@sum.cumo/vue-models",
+  "name": "@sum.cumo/vue-states",
   "version": "1.0.1",
   "description": "Component-based Vue.js state management",
-  "main": "dist/vue-models.umd.js",
-  "module": "dist/vue-models.esm.js",
-  "unpkg": "dist/vue-models.min.js",
+  "main": "dist/vue-states.umd.js",
+  "module": "dist/vue-states.esm.js",
+  "unpkg": "dist/vue-states.min.js",
   "typings": "dist/ems/index.d.ts",
   "keywords": [
     "vue",
@@ -17,21 +17,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:sumcumo/vue-models.git"
+    "url": "git@github.com:sumcumo/vue-states.git"
   },
-  "homepage": "https://github.com/sumcumo/vue-models",
+  "homepage": "https://github.com/sumcumo/vue-states",
   "scripts": {
     "test": "jest --coverage=false",
     "test.coverage": "jest",
-    "release": "git checkout master && git pull origin master && standard-version && git push --follow-tags origin master",
+    "release": "git checkout master && git pull origin master && standard-version",
     "lint": "tslint -p ./tsconfig.base.json",
     "build": "npm run build:clear && tsc && npm run build:browser && npm run build:es && npm run build:umd",
     "build:clear": "rm -rf ./dist",
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "generate": "npm run test.coverage && npm run lint && npm run build",
-    "prepack": "npm run generate"
+    "prepack": "npm run test.coverage && npm run lint && npm run build"
   },
   "author": "sum.cumo GmbH",
   "license": "Apache-2.0",

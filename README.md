@@ -1,18 +1,17 @@
-[![CircleCI](https://circleci.com/gh/sumcumo/vue-models.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-models)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/maintainability)](https://codeclimate.com/github/sumcumo/vue-models/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/c92c47325f3c5453540d/test_coverage)](https://codeclimate.com/github/sumcumo/vue-models/test_coverage)
-[![Depfu](https://badges.depfu.com/badges/5ffd662e83d120e5a968aba1b70bfeef/count.svg)](https://depfu.com/github/sumcumo/vue-models?project_id=7633)
+[![CircleCI](https://circleci.com/gh/sumcumo/vue-states.svg?style=svg)](https://circleci.com/gh/sumcumo/vue-states)
+[![Maintainability](https://api.codeclimate.com/v1/badges/635869dc6220b29b1aa6/maintainability)](https://codeclimate.com/github/sumcumo/vue-states/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/635869dc6220b29b1aa6/test_coverage)](https://codeclimate.com/github/sumcumo/vue-states/test_coverage)
 
-# VueModels
-*VueModels is a state management system for Vue.js.*
+# Vue States
+*Vue States is a state management system for Vue.js.*
 
-You might want to choose to use VueModels for:
+You might want to choose to use Vue States for:
 
-- **SIMPLICITY** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
-- **FLEXIBLE SCOPE**<br />It is designed to support application-wide and local state, and can still be hydrated from  SSR or localStorage.
-- **LEARNING & REFACTORING**<br />The state is composed of Vue components. That means: almost no new APIs and patterns to learn, plus seamless refactoring of your application.
-- **POWER**<br />All plugins and native Vue capabilities are accessible by design, without any configuration ( `this.$router, this.$apollo, created()...` ).
-- **[HISTORY](#history)**<br />In combination with [VueHistory](https://github.com/sumcumo/vue-history) you get a detailed view of what's going on, even for complex scenarios, async processes, error tracking and deeply nested call chains.
+- **Simplicity** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
+- **Flexible scope**<br />It is designed to support application-wide and local state, and can still be hydrated from  SSR or localStorage.
+- **Learning & refactoring**<br />The state is composed of Vue components. That means: almost no new APIs and patterns to learn, plus seamless refactoring of your application.
+- **Power**<br />All plugins and native Vue capabilities are accessible by design, without any configuration ( `this.$router, this.$apollo, created()...` ).
+- **[History](#history)**<br />In combination with [Vue History](https://github.com/sumcumo/vue-history) you get a detailed view of what's going on, even for complex scenarios, async processes, error tracking and deeply nested call chains.
 
 *This package was released just recently. Feedback is highly welcome.*
 
@@ -21,15 +20,15 @@ You might want to choose to use VueModels for:
 The plugin can be installed without any further options: 
 
 ```javascript
-import VueModels from 'vue-models'
-Vue.use(VueModels)
+import VueStates from '@sum.cumo/vue-states'
+Vue.use(VueStates)
 ```
 
 ...or with additional configuration:
 
 ```javascript
 Vue.use(
-  VueModels, 
+  VueStates, 
   {
     // equal to Vue mixins, will be applied to every created model
     mixins: [],
@@ -143,19 +142,19 @@ export default {
 
 ## History 
 
-To keep track of what happens inside the models can check out [vue-history](https://github.com/sumcumo/vue-history), 
-a package that was developed alongside VueModels but not only works for models but for any Vue component.
+To keep track of what happens inside the models can check out [Vue History](https://github.com/sumcumo/vue-history), 
+a package that was developed alongside Vue States but not only works for models but for any Vue component.
 
-After installing VueHistory you can enable it for all models by setting the `history: true` option:
+After installing Vue History you can enable it for all models by setting the `history: true` option:
 
 ```javascript
 import VueHistory from '@sum.cumo/vue-history'
-import VueModels from '@sum.cumo/vue-models'
+import VueStates from '@sum.cumo/vue-states'
 
 Vue.use(VueHistory)
 
 Vue.use(
-  VueModels, 
+  VueStates, 
   { mixins: [ { history: true } ] }
 )
 ```
@@ -188,20 +187,20 @@ Object.defineProperty(context, 'vueModelState', {
 
 ```html
 <!-- index.html -->
-{{{ renderState({ contextKey: 'vueModelState', windowKey: '__VUE_MODELS_STATE__' }) }}}
+{{{ renderState({ contextKey: 'vueModelState', windowKey: '__VUE_STATES__' }) }}}
 ```
 
 ```javascript
 // main.js
-import { Registry } from '@sum.cumo/vue-models'
+import { Registry } from '@sum.cumo/vue-states'
 
 export default async function createApp() {
   // ...
   
   const modelRegistry = new Registry()
 
-  if (typeof window !== 'undefined' && window.__VUE_MODELS_STATE__) {
-    modelRegistry.importState(window.__VUE_MODELS_STATE__)
+  if (typeof window !== 'undefined' && window.__VUE_STATES__) {
+    modelRegistry.importState(window.__VUE_STATES__)
   }
 
   const app = new Vue({
@@ -264,7 +263,7 @@ Nuxt.js gets confused by the models attached to the component tree. The errors c
 
 ```javascript
 Vue.use(
-  VueModels, 
+  VueStates, 
   { mixins: [ { abstract: true } ] }
 )
 ```

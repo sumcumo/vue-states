@@ -2,7 +2,7 @@ import {
   createLocalVue,
   mount,
 } from '@vue/test-utils'
-import VueModels from './index'
+import VueStates from './index'
 import Registry from './registry'
 
 /* tslint:disable-next-line:variable-name */
@@ -15,7 +15,7 @@ const GlobalModel = {
 }
 
 const localVue = createLocalVue()
-localVue.use(VueModels)
+localVue.use(VueStates)
 
 /* tslint:disable-next-line:variable-name */
 const SomeModel = {
@@ -70,7 +70,7 @@ const consumerComponent = {
   },
 }
 
-describe('vue-models', () => {
+describe('Vue States', () => {
   let wrapper: any
 
   let mockError: jest.Mock<any>
@@ -91,7 +91,7 @@ describe('vue-models', () => {
   // adding elements to $root seems to be incompatible with mount()
   it('should add globalModels to the root component', () => {
     const globalModelsVue = createLocalVue()
-    globalModelsVue.use(VueModels, {
+    globalModelsVue.use(VueStates, {
       globalModels: {
         GlobalModel,
       },
@@ -193,7 +193,7 @@ describe('vue-models', () => {
   it('should allow adding custom mixins', () => {
     const localVueWithMixins = createLocalVue()
 
-    localVueWithMixins.use(VueModels, {
+    localVueWithMixins.use(VueStates, {
       mixins: [{ someProp: 'has_an_installed_mixin' }],
     })
 
