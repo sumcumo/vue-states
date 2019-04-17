@@ -45,7 +45,7 @@
     "rollup-plugin-uglify": "6.0.2",
     "standard-version": "5.0.2",
     "ts-jest": "24.0.2",
-    "tslint": "5.15.0",
+    "tslint": "5.16.0",
     "tslint-config-airbnb": "5.11.1",
     "typescript": "3.4.3",
     "uglify-es": "3.3.9",
