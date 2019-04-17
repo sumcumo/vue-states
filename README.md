@@ -5,6 +5,8 @@
 # Vue States
 *Vue States is a state management system for Vue.js.*
 
+Checkout the examples at https://github.com/JohannesLamberts/vue-states-examples.
+
 You might want to choose to use Vue States for:
 
 - **Simplicity** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
