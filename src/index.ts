@@ -8,6 +8,11 @@ import { ModelInstallOptions } from './types'
 
 export { Registry }
 
+interface InstallContext {
+  vue: VueConstructor,
+  installOptions: ModelInstallOptions,
+}
+
 function resolveInjection(this: Vue, key: string) {
   // tslint:disable-next-line no-this-assignment
   let source = this
@@ -62,10 +67,9 @@ const OPTIONS_DEFAULTS: ModelInstallOptions = {
 
 function createModel(
   this: Vue,
-  vue: VueConstructor,
+  context: InstallContext,
   key: string,
   optionsOrClass: ComponentOptions<Vue> | VueConstructor,
-  installOptions: ModelInstallOptions,
 ) {
   const isClass = typeof optionsOrClass === 'function'
     // check for 'super' to enable later support for options like
@@ -76,9 +80,9 @@ function createModel(
     this,
     key,
     isClass ? {} : (optionsOrClass as ComponentOptions<Vue>),
-    installOptions.mixins,
+    context.installOptions.mixins,
   )
-  const vm = new ((isClass ? optionsOrClass : vue) as VueConstructor)(options);
+  const vm = new (isClass ? (optionsOrClass as VueConstructor) : context.vue)(options);
 
   (this as any)[key] = this.$modelsProvided[key] = vm
   this.$modelRegistry.register(vm)
@@ -89,7 +93,7 @@ function createModel(
   })
 }
 
-function createModels(this: Vue, vue: VueConstructor, installOptions: ModelInstallOptions) {
+function createModels(this: Vue, context: InstallContext) {
   this.$modelsProvided = {}
 
   if (!this.$options.models && this !== this.$root) {
@@ -103,7 +107,7 @@ function createModels(this: Vue, vue: VueConstructor, installOptions: ModelInsta
   }
 
   if (this === this.$root) {
-    const globalModels = installOptions.globalModels
+    const globalModels = context.installOptions.globalModels
     Object.values(globalModels).forEach(m => m.modelId = 'global')
     models = Object.assign({}, globalModels, models)
   }
@@ -113,7 +117,7 @@ function createModels(this: Vue, vue: VueConstructor, installOptions: ModelInsta
   Object
     .entries(models)
     .forEach(([key, options]) => {
-      createModel.call(this, vue, key, options, installOptions)
+      createModel.call(this, context, key, options)
     })
 }
 
@@ -138,7 +142,7 @@ export default {
         }
       },
       created(this: Vue) {
-        createModels.call(this, vue, installOptions)
+        createModels.call(this, { vue, installOptions })
       },
     })
   },
