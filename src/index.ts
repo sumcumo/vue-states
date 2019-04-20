@@ -4,19 +4,16 @@ import {
 } from 'vue'
 import { Vue } from 'vue/types/vue'
 import Registry from './registry'
-import {
-  ModelInstallOptions,
-  VueModelProvided,
-} from './types'
+import { ModelInstallOptions } from './types'
 
 export { Registry }
 
-function resolveInjection(this: VueModelProvided, key: string) {
+function resolveInjection(this: Vue, key: string) {
   // tslint:disable-next-line no-this-assignment
   let source = this
-  let ressource: VueModelProvided | null = null
+  let ressource: Vue | null = null
 
-  while (source = (source.$parent as VueModelProvided)) {
+  while (source = source.$parent) {
     if (source.$modelsProvidedKeys && source.$modelsProvidedKeys.includes(key)) {
       ressource = source
       break
@@ -37,7 +34,7 @@ function resolveInjection(this: VueModelProvided, key: string) {
 }
 
 function createModelOptions(
-  vmHost: VueModelProvided,
+  vmHost: Vue,
   name: string,
   options: ComponentOptions<Vue>,
   mergeMixins: Required<ComponentOptions<Vue>>['mixins'],
@@ -107,11 +104,11 @@ export default {
     const installOptions: ModelInstallOptions = Object.assign({}, OPTIONS_DEFAULTS, rawInstallOptions)
 
     vue.mixin({
-      beforeCreate(this: VueModelProvided) {
+      beforeCreate(this: Vue) {
         const { modelRegistry, injectModels } = this.$options
         this.$modelRegistry = this === this.$root
           ? (modelRegistry || new Registry(installOptions.restoreOnReplace))
-          : (<VueModelProvided>this.$root).$modelRegistry
+          : this.$root.$modelRegistry
 
         if (injectModels) {
           injectModels.forEach((inject) => {
@@ -119,7 +116,7 @@ export default {
           })
         }
       },
-      created(this: VueModelProvided) {
+      created(this: Vue) {
         createModels.call(this, vue, installOptions)
       },
     })

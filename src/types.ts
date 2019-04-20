@@ -1,5 +1,8 @@
 import { ComponentOptions } from 'vue/types/options'
-import { Vue } from 'vue/types/vue'
+import {
+  Vue,
+  VueConstructor,
+} from 'vue/types/vue'
 import Registry from './registry'
 
 declare module 'vue/types/options' {
@@ -12,20 +15,26 @@ declare module 'vue/types/options' {
   }
 }
 
-export interface VueModelMap {
-  [key: string]: ComponentOptions<Vue>,
+declare module 'vue/types/vue' {
+  // Global properties can be declared
+  // on the `VueConstructor` interface
+  interface Vue {
+    $modelsProvidedKeys?: string[],
+    $modelsProvided: { [key: string]: Vue },
+    $modelRegistry: Registry,
+  }
 }
 
-export interface VueModelProvided extends Vue {
-  $modelsProvidedKeys: string[],
-  $modelsProvided: { [key: string]: Vue },
-  $modelRegistry: Registry,
+export interface VueModelMap {
+  [key: string]: ComponentOptions<Vue> | VueConstructor,
 }
 
 export interface ModelInstallOptions {
   mixins: Required<ComponentOptions<Vue>>['mixins'],
   restoreOnReplace: boolean,
-  globalModels: VueModelMap,
+  globalModels: {
+    [key: string]: ComponentOptions<Vue>,
+  },
 }
 
 export interface Export {
