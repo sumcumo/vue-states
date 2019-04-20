@@ -15,6 +15,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "experimentalDecorators": true
   }
 }

@@ -2,6 +2,8 @@ import {
   createLocalVue,
   mount,
 } from '@vue/test-utils'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import VueStates from './index'
 import Registry from './registry'
 
@@ -110,6 +112,45 @@ describe('Vue States', () => {
   it('should provide models down the tree', () => {
     expect((wrapper.find(consumerComponent) as any).vm.SomeModel).toBe(wrapper.vm.SomeModel)
     expect(wrapper.find('#fooContainer').text()).toBe('bar')
+  })
+
+  it('should initialize class-based components', () => {
+    @Component({})
+    class ClassBasedComponent extends Vue {
+      foo = '123'
+
+      changeFoo(newValue: string) {
+        this.foo = newValue
+      }
+    }
+
+    wrapper = mount({ models: { Model: ClassBasedComponent } } as any, { localVue })
+    const Model = wrapper.vm.Model
+    expect(Model.foo).toBe('123')
+    Model.changeFoo('456')
+    expect(Model.foo).toBe('456')
+  })
+
+  it('should initialize vue subclasses (Vue.extend)', () => {
+    // extend twice to make sure multi-level inheritance works as well
+    const classBasedComponent = (Vue.extend({})).extend({
+      data() {
+        return {
+          foo: '123',
+        }
+      },
+      methods: {
+        changeFoo(newValue: string) {
+          this.foo = newValue
+        },
+      },
+    })
+
+    wrapper = mount({ models: { Model: classBasedComponent } } as any, { localVue })
+    const Model = wrapper.vm.Model
+    expect(Model.foo).toBe('123')
+    Model.changeFoo('456')
+    expect(Model.foo).toBe('456')
   })
 
   it('should allow standard components as part of the chain', () => {
