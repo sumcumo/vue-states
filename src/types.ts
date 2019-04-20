@@ -2,6 +2,12 @@ import { ComponentOptions } from 'vue/types/options'
 import { Vue } from 'vue/types/vue'
 import Registry from './registry'
 
+declare module 'vue/types/options' {
+  interface ComponentOptions<V extends Vue> {
+    injectModels?: string[]
+  }
+}
+
 export interface VueModelOptions extends ComponentOptions<Vue> {
   modelId?: string,
 }
