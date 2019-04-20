@@ -60,7 +60,36 @@ const OPTIONS_DEFAULTS: ModelInstallOptions = {
   globalModels: {},
 }
 
-function createModels(this: VueModelProvided, vue: VueConstructor, installOptions: ModelInstallOptions) {
+function createModel(
+  this: Vue,
+  vue: VueConstructor,
+  key: string,
+  optionsOrClass: ComponentOptions<Vue> | VueConstructor,
+  installOptions: ModelInstallOptions,
+) {
+  const isClass = typeof optionsOrClass === 'function'
+    // check for 'super' to enable later support for options like
+    // models: { Content: () => import('some-chunk') }
+    && typeof (optionsOrClass as any).super === 'function'
+
+  const options = createModelOptions(
+    this,
+    key,
+    isClass ? {} : (optionsOrClass as ComponentOptions<Vue>),
+    installOptions.mixins,
+  )
+  const vm = new ((isClass ? optionsOrClass : vue) as VueConstructor)(options);
+
+  (this as any)[key] = this.$modelsProvided[key] = vm
+  this.$modelRegistry.register(vm)
+
+  this.$on('hook:beforeDestroy', () => {
+    this.$modelRegistry.unregister(vm)
+    vm.$destroy()
+  })
+}
+
+function createModels(this: Vue, vue: VueConstructor, installOptions: ModelInstallOptions) {
   this.$modelsProvided = {}
 
   if (!this.$options.models && this !== this.$root) {
@@ -83,16 +112,8 @@ function createModels(this: VueModelProvided, vue: VueConstructor, installOption
 
   Object
     .entries(models)
-    .map(([key, options]) => {
-      const vm = new vue(createModelOptions(this, key, options, installOptions.mixins));
-
-      (this as any)[key] = this.$modelsProvided[key] = vm
-      this.$modelRegistry.register(vm)
-
-      this.$on('hook:beforeDestroy', () => {
-        this.$modelRegistry.unregister(vm)
-        vm.$destroy()
-      })
+    .forEach(([key, options]) => {
+      createModel.call(this, vue, key, options, installOptions)
     })
 }
 
