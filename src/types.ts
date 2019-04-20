@@ -4,37 +4,22 @@ import Registry from './registry'
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
+    modelRegistry?: Registry,
     injectModels?: string[]
+    models?: VueModelMap | ((this: Vue) => VueModelMap)
+    modelId?: string,
+    modelGId?: string,
   }
 }
 
-export interface VueModelOptions extends ComponentOptions<Vue> {
-  modelId?: string,
-}
-
-export interface VueModelOptionsFinal extends ComponentOptions<Vue> {
-  name: string,
-  modelId: string,
-  modelGId: string,
-}
-
-export interface VueModel extends Vue {
-  $options: Vue['$options'] & VueModelOptionsFinal,
-}
-
 export interface VueModelMap {
-  [key: string]: VueModelOptions,
+  [key: string]: ComponentOptions<Vue>,
 }
 
 export interface VueModelProvided extends Vue {
   $modelsProvidedKeys: string[],
-  $modelsProvided: { [key: string]: VueModel },
+  $modelsProvided: { [key: string]: Vue },
   $modelRegistry: Registry,
-  $options: Vue['$options'] & {
-    modelRegistry: Registry,
-    models?: VueModelMap | ((this: Vue) => VueModelMap),
-    injectModels: string[],
-  },
 }
 
 export interface ModelInstallOptions {

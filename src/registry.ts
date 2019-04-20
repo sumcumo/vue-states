@@ -1,22 +1,20 @@
-import {
-  Export,
-  VueModel,
-} from './types'
+import { Vue } from 'vue/types/vue'
+import { Export } from './types'
 
 /**
  * root registry of history and models,
  * to be registered on the Vue prototype
  */
 export default class Registry {
-  public models: { [key: string]: VueModel } = {}
+  public models: { [key: string]: Vue } = {}
   private hydrationData: { [key: string]: () => object } = {}
 
   constructor(private readonly restoreOnReplace: boolean) {
   }
 
-  register(vm: VueModel) {
-    const current = this.models[vm.$options.modelGId]
-    this.models[vm.$options.modelGId] = vm
+  register(vm: Vue) {
+    const current = this.models[vm.$options.modelGId!]
+    this.models[vm.$options.modelGId!] = vm
     if (current && this.restoreOnReplace) {
       Object.entries(current.$data).forEach(([key, value]) => {
         if (vm.$data.hasOwnProperty(key)) {
@@ -26,9 +24,9 @@ export default class Registry {
     }
   }
 
-  unregister(vm: VueModel) {
-    if (this.models[vm.$options.modelGId] === vm) {
-      delete this.models[vm.$options.modelGId]
+  unregister(vm: Vue) {
+    if (this.models[vm.$options.modelGId!] === vm) {
+      delete this.models[vm.$options.modelGId!]
     }
   }
 

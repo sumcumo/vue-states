@@ -6,9 +6,6 @@ import { Vue } from 'vue/types/vue'
 import Registry from './registry'
 import {
   ModelInstallOptions,
-  VueModel,
-  VueModelOptions,
-  VueModelOptionsFinal,
   VueModelProvided,
 } from './types'
 
@@ -39,12 +36,12 @@ function resolveInjection(this: VueModelProvided, key: string) {
   )
 }
 
-function createModel(
+function createModelOptions(
   vmHost: VueModelProvided,
   name: string,
-  options: VueModelOptions,
+  options: ComponentOptions<Vue>,
   mergeMixins: Required<ComponentOptions<Vue>>['mixins'],
-): VueModelOptionsFinal {
+): ComponentOptions<Vue> {
   const modelId = options.modelId || 'single'
   const modelGId = `${name}~${modelId}`
   const data = vmHost.$modelRegistry.getImportedStateFor(modelGId) || options.data || (() => ({}))
@@ -90,7 +87,7 @@ function createModels(this: VueModelProvided, vue: VueConstructor, installOption
   Object
     .entries(models)
     .map(([key, options]) => {
-      const vm = new vue(createModel(this, key, options, installOptions.mixins)) as VueModel
+      const vm = new vue(createModelOptions(this, key, options, installOptions.mixins));
 
       (this as any)[key] = this.$modelsProvided[key] = vm
       this.$modelRegistry.register(vm)
