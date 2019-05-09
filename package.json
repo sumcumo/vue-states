@@ -5,7 +5,7 @@
   "main": "dist/vue-states.umd.js",
   "module": "dist/vue-states.esm.js",
   "unpkg": "dist/vue-states.min.js",
-  "typings": "dist/ems/index.d.ts",
+  "types": "dist/esm/index.d.ts",
   "keywords": [
     "vue",
     "vuex",
@@ -50,6 +50,7 @@
     "typescript": "3.4.4",
     "uglify-es": "3.3.9",
     "vue": "2.6.10",
+    "vue-class-component": "7.0.2",
     "vue-template-compiler": "2.6.10"
   },
   "peerDependencies": {

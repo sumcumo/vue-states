@@ -1,40 +1,40 @@
 import { ComponentOptions } from 'vue/types/options'
-import { Vue } from 'vue/types/vue'
+import {
+  Vue,
+  VueConstructor,
+} from 'vue/types/vue'
 import Registry from './registry'
 
-export interface VueModelOptions extends ComponentOptions<Vue> {
-  modelId?: string,
+declare module 'vue/types/options' {
+  interface ComponentOptions<V extends Vue> {
+    modelRegistry?: Registry,
+    injectModels?: string[]
+    models?: VueModelMap | ((this: Vue) => VueModelMap)
+    modelId?: string,
+    modelGId?: string,
+  }
 }
 
-export interface VueModelOptionsFinal extends ComponentOptions<Vue> {
-  name: string,
-  modelId: string,
-  modelGId: string,
-}
-
-export interface VueModel extends Vue {
-  $options: Vue['$options'] & VueModelOptionsFinal,
+declare module 'vue/types/vue' {
+  // Global properties can be declared
+  // on the `VueConstructor` interface
+  interface Vue {
+    $modelsProvidedKeys?: string[],
+    $modelsProvided: { [key: string]: Vue },
+    $modelRegistry: Registry,
+  }
 }
 
 export interface VueModelMap {
-  [key: string]: VueModelOptions,
-}
-
-export interface VueModelProvided extends Vue {
-  $modelsProvidedKeys: string[],
-  $modelsProvided: { [key: string]: VueModel },
-  $modelRegistry: Registry,
-  $options: Vue['$options'] & {
-    modelRegistry: Registry,
-    models?: VueModelMap | ((this: Vue) => VueModelMap),
-    injectModels: string[],
-  },
+  [key: string]: ComponentOptions<Vue> | VueConstructor,
 }
 
 export interface ModelInstallOptions {
   mixins: Required<ComponentOptions<Vue>>['mixins'],
   restoreOnReplace: boolean,
-  globalModels: VueModelMap,
+  globalModels: {
+    [key: string]: ComponentOptions<Vue>,
+  },
 }
 
 export interface Export {
