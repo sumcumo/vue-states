@@ -282,4 +282,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ----
 
-[Learn more about sum.cumo](https://www.sumcumo.com/en/) or [work on open source projects](https://www.sumcumo.com/jobs/), too!
+[Learn more about sum.cumo](https://www.sumcumo.com/en) and [work on open source projects](https://www.sumcumo.com/jobs), too!
