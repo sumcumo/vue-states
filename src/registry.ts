@@ -1,6 +1,11 @@
 import { Vue } from 'vue/types/vue'
 import { Export } from './types'
 
+export interface ExportStateOptions {
+  filterDefault?: boolean,
+  context?: any,
+}
+
 /**
  * root registry of history and models,
  * to be registered on the Vue prototype
@@ -30,12 +35,26 @@ export default class Registry {
     }
   }
 
-  exportState(): Export {
+  exportState(
+    {
+      filterDefault = true,
+      context,
+    }: ExportStateOptions = {}): Export {
     const mapped: Export = {}
 
-    Object.keys(this.models)
-      .forEach((key) => {
-        mapped[key] = JSON.stringify(Object.assign({}, this.models[key].$data))
+    Object.entries(this.models)
+      .filter(([_, vm]) => {
+        const { exportState } = vm.$options
+        if (typeof exportState === 'undefined') {
+          return filterDefault
+        }
+        if (typeof exportState === 'function') {
+          return exportState.call(vm, context)
+        }
+        return exportState
+      })
+      .forEach(([key, vm]) => {
+        mapped[key] = JSON.stringify(Object.assign({}, vm.$data))
       })
 
     return mapped

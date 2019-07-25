@@ -12,6 +12,7 @@ declare module 'vue/types/options' {
     models?: VueModelMap | ((this: Vue) => VueModelMap)
     modelId?: string,
     modelGId?: string,
+    exportState?: boolean | ((this: Vue, componentArgs: any) => boolean)
   }
 }
 
