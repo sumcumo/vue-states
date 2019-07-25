@@ -50,7 +50,7 @@
     "typescript": "3.4.4",
     "uglify-es": "3.3.9",
     "vue": "2.6.10",
-    "vue-class-component": "7.0.2",
+    "vue-class-component": "7.1.0",
     "vue-template-compiler": "2.6.10"
   },
   "peerDependencies": {
