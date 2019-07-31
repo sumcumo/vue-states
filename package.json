@@ -39,7 +39,7 @@
     "@commitlint/config-conventional": "8.1.0",
     "@types/jest": "24.0.15",
     "@vue/test-utils": "1.0.0-beta.29",
-    "husky": "3.0.1",
+    "husky": "3.0.2",
     "jest": "24.8.0",
     "rollup": "1.17.0",
     "rollup-plugin-uglify": "6.0.2",
