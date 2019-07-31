@@ -43,7 +43,7 @@
     "jest": "24.8.0",
     "rollup": "1.17.0",
     "rollup-plugin-uglify": "6.0.2",
-    "standard-version": "6.0.1",
+    "standard-version": "7.0.0",
     "ts-jest": "24.0.2",
     "tslint": "5.18.0",
     "tslint-config-airbnb": "5.11.1",
