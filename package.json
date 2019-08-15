@@ -1,6 +1,6 @@
 {
   "name": "@sum.cumo/vue-states",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Component-based Vue.js state management",
   "main": "dist/vue-states.umd.js",
   "module": "dist/vue-states.esm.js",
