@@ -176,6 +176,47 @@ app.$modelRegistry.importState(exported)
 
 Using export/import you can persist state to localStorage or initialize state before Client Side Hydration after SSR.
 
+### Filtered Export
+
+The export can be configured to filter which models will be included in the export.
+
+```javascript
+const exported = app.$modelRegistry.exportState({
+
+  // default: true,
+  // set to false to exclude all models, 
+  // where `exportState` is undefined  
+  filterDefault: false,
+  
+  // context will be passed to exportState callbacks
+  context: {
+    isLocalStorageExport: true,
+  },
+
+})
+```
+
+Models may include an `exportState` option, which must be 
+either a function or a boolean.
+
+```
+export default {
+  name: 'UserModel',
+  exportState(context) {
+    return context.isLocalStorageExport
+        // vm can be accessed from withing the callback 
+        && this.isLoggedIn
+  }
+}
+```
+
+```
+export default {
+  name: 'SomeOtherModel'
+  exportState: false,
+}
+```
+
 ### Server Side Rendering
 
 ```javascript
