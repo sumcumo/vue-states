@@ -7,6 +7,10 @@ const config = Object.assign({}, base, {
     file: 'dist/vue-states.min.js',
     format: 'iife',
     name: 'VueStates',
+    exports: 'named',
+    globals: {
+      'vue-class-component': 'vueClassComponent'
+    }
   },
 })
 
