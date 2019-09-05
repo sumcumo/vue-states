@@ -34,6 +34,9 @@
   },
   "author": "sum.cumo GmbH",
   "license": "Apache-2.0",
+  "dependencies": {
+    "vue-class-component": "^7.1.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
@@ -52,7 +55,6 @@
     "typescript": "3.6.2",
     "uglify-es": "3.3.9",
     "vue": "2.6.10",
-    "vue-class-component": "7.1.0",
     "vue-template-compiler": "2.6.10"
   },
   "peerDependencies": {
