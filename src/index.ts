@@ -6,6 +6,7 @@ import { Vue } from 'vue/types/vue'
 import Registry from './registry'
 import { ModelInstallOptions } from './types'
 
+export * from './decorator'
 export { Registry }
 
 interface InstallContext {
