@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/sumcumo/vue-states/compare/v1.2.0...v1.3.0) (2019-09-05)
+
+
+### Bug Fixes
+
+* refine ComponentOption type ([d4a6ee7](https://github.com/sumcumo/vue-states/commit/d4a6ee7))
+
+
+### Features
+
+* add InjectModel decorator ([0955551](https://github.com/sumcumo/vue-states/commit/0955551))
+
 ## [1.2.0](https://github.com/sumcumo/vue-states/compare/v1.1.0...v1.2.0) (2019-08-15)
 
 
