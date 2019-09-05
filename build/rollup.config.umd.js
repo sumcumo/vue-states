@@ -5,6 +5,10 @@ const config = Object.assign({}, base, {
     file: 'dist/vue-states.umd.js',
     format: 'umd',
     name: 'VueStates',
+    exports: 'named',
+    globals: {
+      'vue-class-component': 'vueClassComponent'
+    }
   },
 })
 

@@ -5,6 +5,7 @@ const config = Object.assign({}, base, {
     file: 'dist/vue-states.esm.js',
     format: 'es',
     name: 'VueStates',
+    exports: 'named',
   },
 })
 
