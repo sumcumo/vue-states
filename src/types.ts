@@ -9,10 +9,10 @@ declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
     modelRegistry?: Registry,
     injectModels?: string[]
-    models?: VueModelMap | ((this: Vue) => VueModelMap)
+    models?: VueModelMap | ((this: V) => VueModelMap)
     modelId?: string,
     modelGId?: string,
-    exportState?: boolean | ((this: Vue, componentArgs: any) => boolean)
+    exportState?: boolean | ((this: V, componentArgs: any) => boolean)
   }
 }
 
