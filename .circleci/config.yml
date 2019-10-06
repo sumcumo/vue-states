@@ -92,7 +92,7 @@ workflows:
   check:
     triggers:
       - schedule:
-          cron: "0 20 * * *"
+          cron: '0 20 * * *'
           filters:
             branches:
               only: master

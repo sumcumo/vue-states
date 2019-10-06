@@ -3,23 +3,24 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/635869dc6220b29b1aa6/test_coverage)](https://codeclimate.com/github/sumcumo/vue-states/test_coverage)
 
 # Vue States
-*Vue States is a state management system for Vue.js.*
+
+_Vue States is a state management system for Vue.js._
 
 Checkout the examples at https://github.com/JohannesLamberts/vue-states-examples.
 
 You might want to choose to use Vue States for:
 
 - **Simplicity** <br />Just `this.MyModel.key` and `this.MyModel.update(payload)`. No huge API, that exposes implementation details like `state, getters, commit, dispatch`.<br />Hot Module Replacement and Lazy-Loading made easy.
-- **Flexible scope**<br />It is designed to support application-wide and local state, and can still be hydrated from  SSR or localStorage.
+- **Flexible scope**<br />It is designed to support application-wide and local state, and can still be hydrated from SSR or localStorage.
 - **Learning & refactoring**<br />The state is composed of Vue components. That means: almost no new APIs and patterns to learn, plus seamless refactoring of your application.
 - **Power**<br />All plugins and native Vue capabilities are accessible by design, without any configuration ( `this.$router, this.$apollo, created()...` ).
 - **[History](#history)**<br />In combination with [Vue History](https://github.com/sumcumo/vue-history) you get a detailed view of what's going on, even for complex scenarios, async processes, error tracking and deeply nested call chains.
 
-*This package was released just recently. Feedback is highly welcome.*
+_This package was released just recently. Feedback is highly welcome._
 
 ## Installation
 
-The plugin can be installed without any further options: 
+The plugin can be installed without any further options:
 
 ```javascript
 import VueStates from '@sum.cumo/vue-states'
@@ -29,23 +30,20 @@ Vue.use(VueStates)
 ...or with additional configuration:
 
 ```javascript
-Vue.use(
-  VueStates, 
-  {
-    // equal to Vue mixins, will be applied to every created model
-    mixins: [],
+Vue.use(VueStates, {
+  // equal to Vue mixins, will be applied to every created model
+  mixins: [],
 
-    // a models state will be restored
-    // if an old match (same name and modelId) is found
-    // can be used to preserve state during hot module replacement 🚀
-    // default: false
-    restoreOnReplace: process.env.NODE_ENV === 'development', 
+  // a models state will be restored
+  // if an old match (same name and modelId) is found
+  // can be used to preserve state during hot module replacement 🚀
+  // default: false
+  restoreOnReplace: process.env.NODE_ENV === 'development',
 
-    // registers models on the $root instance, same as
-    // const app = new Vue({ models: globalModels })
-    globalModels,
-  }
-)
+  // registers models on the $root instance, same as
+  // const app = new Vue({ models: globalModels })
+  globalModels,
+})
 ```
 
 ## Getting started
@@ -64,13 +62,13 @@ export default {
       products: [],
     }
   },
-  
-  // created / destroy hooks are invoked 
+
+  // created / destroy hooks are invoked
   created() {
     this.stage = 'created'
     this.loadProducts()
   },
-  
+
   // vuex mutations and actions become just methods
   methods: {
     async loadProducts() {
@@ -78,9 +76,9 @@ export default {
     },
     saveProducts(products) {
       this.products = products
-    }
+    },
   },
-  
+
   // vuex getters become computed
   computed: {
     stageUppercase() {
@@ -88,7 +86,6 @@ export default {
     },
   },
 }
-
 ```
 
 ### Hosting
@@ -100,14 +97,13 @@ It is available in the hosting component itself and any child component, that in
 import App from '@/models/example'
 
 export default {
-
   name: 'ExampleHost',
-  
+
   models: {
     // 'App' becomes the models name and the key to reference it
     App,
   },
-  
+
   template: `
   <div>
     <!-- 
@@ -124,13 +120,10 @@ export default {
 
 ```javascript
 export default {
-
   name: 'ExampleChild',
-  
-  injectModels: [
-    'App',
-  ],
-  
+
+  injectModels: ['App'],
+
   template: `
   <div>
     <!-- properties are reactive -->
@@ -141,10 +134,9 @@ export default {
 }
 ```
 
+## History
 
-## History 
-
-To keep track of what happens inside the models can check out [Vue History](https://github.com/sumcumo/vue-history), 
+To keep track of what happens inside the models can check out [Vue History](https://github.com/sumcumo/vue-history),
 a package that was developed alongside Vue States but not only works for models but for any Vue component.
 
 After installing Vue History you can enable it for all models by setting the `history: true` option:
@@ -155,19 +147,14 @@ import VueStates from '@sum.cumo/vue-states'
 
 Vue.use(VueHistory)
 
-Vue.use(
-  VueStates, 
-  { mixins: [ { history: true } ] }
-)
+Vue.use(VueStates, { mixins: [{ history: true }] })
 ```
-
-
 
 ## State export/import
 
 State can be exported from and imported into the root model registry.
 The imported state will be used when initializing models with matching name and modelId.
-The state must therefore be imported *before* the model is initialized.
+The state must therefore be imported _before_ the model is initialized.
 
 ```javascript
 const exported = app.$modelRegistry.exportState()
@@ -182,21 +169,19 @@ The export can be configured to filter which models will be included in the expo
 
 ```javascript
 const exported = app.$modelRegistry.exportState({
-
   // default: true,
-  // set to false to exclude all models, 
-  // where `exportState` is undefined  
+  // set to false to exclude all models,
+  // where `exportState` is undefined
   filterDefault: false,
-  
+
   // context will be passed to exportState callbacks
   context: {
     isLocalStorageExport: true,
   },
-
 })
 ```
 
-Models may include an `exportState` option, which must be 
+Models may include an `exportState` option, which must be
 either a function or a boolean.
 
 ```
@@ -204,7 +189,7 @@ export default {
   name: 'UserModel',
   exportState(context) {
     return context.isLocalStorageExport
-        // vm can be accessed from withing the callback 
+        // vm can be accessed from withing the callback
         && this.isLoggedIn
   }
 }
@@ -226,11 +211,12 @@ Object.defineProperty(context, 'vueModelState', {
     return app.$modelRegistry.exportState()
   },
 })
-``` 
+```
 
 ```html
 <!-- index.html -->
-{{{ renderState({ contextKey: 'vueModelState', windowKey: '__VUE_STATES__' }) }}}
+{{{ renderState({ contextKey: 'vueModelState', windowKey: '__VUE_STATES__' })
+}}}
 ```
 
 ```javascript
@@ -239,7 +225,7 @@ import { Registry } from '@sum.cumo/vue-states'
 
 export default async function createApp() {
   // ...
-  
+
   const modelRegistry = new Registry()
 
   if (typeof window !== 'undefined' && window.__VUE_STATES__) {
@@ -262,20 +248,20 @@ For import/export to work you will need to provide an id to further identify the
 
 ```javascript
 export default modelId => ({
-    // the combination of name and modelId must be unique at any given time 
-    modelId, 
+  // the combination of name and modelId must be unique at any given time
+  modelId,
 
-    data() {
-      return {
-        counter: 0,
-      }
+  data() {
+    return {
+      counter: 0,
+    }
+  },
+
+  methods: {
+    increment() {
+      this.counter += 1
     },
-    
-    methods: {
-      increment() {
-        this.counter += 1
-      },
-    },
+  },
 })
 ```
 
@@ -287,16 +273,16 @@ export default {
     someIdentifier: {
       type: String,
       required: true,
-    }
+    },
   },
-  
-  // you may also pass a function that is evaluated in the created hook 
+
+  // you may also pass a function that is evaluated in the created hook
   // and receives the hosting Vue component as context
   models() {
     return {
       Counter: createCounter(this.someIdentifier),
     }
-  }
+  },
 }
 ```
 
@@ -305,10 +291,7 @@ export default {
 Nuxt.js gets confused by the models attached to the component tree. The errors can be resolved by adding `abtract: true` to all models (which however makes them invisible in the developer tools).
 
 ```javascript
-Vue.use(
-  VueStates, 
-  { mixins: [ { abstract: true } ] }
-)
+Vue.use(VueStates, { mixins: [{ abstract: true }] })
 ```
 
 ## License
@@ -321,6 +304,6 @@ Licensed under the Apache License, Version 2.0 (the “License”); you may not 
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-----
+---
 
 [Learn more about sum.cumo](https://www.sumcumo.com/en) and [work on open source projects](https://www.sumcumo.com/jobs), too!

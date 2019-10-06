@@ -1,6 +1,6 @@
-import { InjectModel } from './decorator'
+import { InjectModel } from './decorator'
 import Component from 'vue-class-component'
-import  Vue from 'vue'
+import Vue from 'vue'
 
 describe('InjectModel', () => {
   @Component

@@ -8,8 +8,8 @@ const config = Object.assign({}, base, {
     name: 'VueStates',
     exports: 'named',
     globals: {
-      'vue-class-component': 'vueClassComponent'
-    }
+      'vue-class-component': 'vueClassComponent',
+    },
   },
 })
 

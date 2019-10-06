@@ -1,7 +1,4 @@
-import {
-  createLocalVue,
-  mount,
-} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import { ComponentOptions } from 'vue'
 import { Vue } from 'vue/types/vue'
 import VueStates from './index'
@@ -19,9 +16,7 @@ const createModel = (value: string) => ({
   },
 })
 
-function createWrapper(
-  exportState?: ComponentOptions<Vue>['exportState'],
-) {
+function createWrapper(exportState?: ComponentOptions<Vue>['exportState']) {
   return mount(
     {
       models: {
@@ -65,31 +60,30 @@ describe('registry', () => {
       { localVue },
     )
     const exported = wrapper.vm.$modelRegistry.exportState()
-    expect(exported)
-      .toEqual({
-        'one~single': JSON.stringify({ key: 'one' }),
-        'two~single': JSON.stringify({ key: 'two' }),
-      })
+    expect(exported).toEqual({
+      'one~single': JSON.stringify({ key: 'one' }),
+      'two~single': JSON.stringify({ key: 'two' }),
+    })
   })
 
   it('should filter exportState on boolean', () => {
-    expect(exportFromWrapper(false))
-      .toEqual({})
-    expect(exportFromWrapper(true))
-      .toEqual(standardExportedState)
+    expect(exportFromWrapper(false)).toEqual({})
+    expect(exportFromWrapper(true)).toEqual(standardExportedState)
   })
 
   it('should filter exportState on callback', () => {
-    expect(exportFromWrapper(function () {
-      // @ts-ignore
-      return this.key === 'one'
-    }))
-      .toEqual(standardExportedState)
-    expect(exportFromWrapper(function () {
-      // @ts-ignore
-      return this.key !== 'one'
-    }))
-      .toEqual({})
+    expect(
+      exportFromWrapper(function() {
+        // @ts-ignore
+        return this.key === 'one'
+      }),
+    ).toEqual(standardExportedState)
+    expect(
+      exportFromWrapper(function() {
+        // @ts-ignore
+        return this.key !== 'one'
+      }),
+    ).toEqual({})
   })
 
   it('should forward args to callback', () => {
@@ -98,29 +92,22 @@ describe('registry', () => {
     const exportStateCallback = jest.fn(({ shouldExport }) => shouldExport)
 
     function exportWithContext() {
-      return exportFromWrapper(
-        exportStateCallback,
-        { context: { shouldExport } },
-      )
+      return exportFromWrapper(exportStateCallback, {
+        context: { shouldExport },
+      })
     }
 
-    expect(exportWithContext())
-      .toEqual(standardExportedState)
-    expect(exportStateCallback)
-      .toHaveBeenLastCalledWith({ shouldExport })
+    expect(exportWithContext()).toEqual(standardExportedState)
+    expect(exportStateCallback).toHaveBeenLastCalledWith({ shouldExport })
 
     shouldExport = false
 
-    expect(exportWithContext())
-      .toEqual({})
-    expect(exportStateCallback)
-      .toHaveBeenLastCalledWith({ shouldExport })
+    expect(exportWithContext()).toEqual({})
+    expect(exportStateCallback).toHaveBeenLastCalledWith({ shouldExport })
   })
 
   it('should use default when exportState is undefined', () => {
-    expect(exportFromWrapper())
-      .toEqual(standardExportedState)
-    expect(exportFromWrapper(undefined, { filterDefault: false }))
-      .toEqual({})
+    expect(exportFromWrapper()).toEqual(standardExportedState)
+    expect(exportFromWrapper(undefined, { filterDefault: false })).toEqual({})
   })
 })

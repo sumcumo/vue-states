@@ -1,7 +1,4 @@
-import {
-  ComponentOptions,
-  VueConstructor,
-} from 'vue'
+import { ComponentOptions, VueConstructor } from 'vue'
 import { Vue } from 'vue/types/vue'
 import Registry from './registry'
 import { ModelInstallOptions } from './types'
@@ -10,8 +7,8 @@ export * from './decorator'
 export { Registry }
 
 interface InstallContext {
-  vue: VueConstructor,
-  installOptions: ModelInstallOptions,
+  vue: VueConstructor
+  installOptions: ModelInstallOptions
 }
 
 function resolveInjection(this: Vue, key: string) {
@@ -19,8 +16,11 @@ function resolveInjection(this: Vue, key: string) {
   let source = this
   let ressource: Vue | null = null
 
-  while (source = source.$parent) {
-    if (source.$modelsProvidedKeys && source.$modelsProvidedKeys.includes(key)) {
+  while ((source = source.$parent)) {
+    if (
+      source.$modelsProvidedKeys &&
+      source.$modelsProvidedKeys.includes(key)
+    ) {
       ressource = source
       break
     }
@@ -30,13 +30,9 @@ function resolveInjection(this: Vue, key: string) {
     throw new Error(`No provider found for ${key}`)
   }
 
-  Object.defineProperty(
-    this,
-    key,
-    {
-      get: () => (ressource as any)[key],
-    },
-  )
+  Object.defineProperty(this, key, {
+    get: () => (ressource as any)[key],
+  })
 }
 
 function createModelOptions(
@@ -47,7 +43,10 @@ function createModelOptions(
 ): ComponentOptions<Vue> {
   const modelId = options.modelId || 'single'
   const modelGId = `${name}~${modelId}`
-  const data = vmHost.$modelRegistry.getImportedStateFor(modelGId) || options.data || (() => ({}))
+  const data =
+    vmHost.$modelRegistry.getImportedStateFor(modelGId) ||
+    options.data ||
+    (() => ({}))
   const mixins = [...mergeMixins, ...(options.mixins || [])]
 
   return Object.assign({}, options, {
@@ -72,10 +71,11 @@ function createModel(
   key: string,
   optionsOrClass: ComponentOptions<Vue> | VueConstructor,
 ) {
-  const isClass = typeof optionsOrClass === 'function'
+  const isClass =
+    typeof optionsOrClass === 'function' &&
     // check for 'super' to enable later support for options like
     // models: { Content: () => import('some-chunk') }
-    && typeof (optionsOrClass as any).super === 'function'
+    typeof (optionsOrClass as any).super === 'function'
 
   const options = createModelOptions(
     this,
@@ -83,9 +83,10 @@ function createModel(
     isClass ? {} : (optionsOrClass as ComponentOptions<Vue>),
     context.installOptions.mixins,
   )
-  const vm = new (isClass ? (optionsOrClass as VueConstructor) : context.vue)(options);
-
-  (this as any)[key] = this.$modelsProvided[key] = vm
+  const vm = new (isClass ? (optionsOrClass as VueConstructor) : context.vue)(
+    options,
+  )
+  ;(this as any)[key] = this.$modelsProvided[key] = vm
   this.$modelRegistry.register(vm)
 
   this.$on('hook:beforeDestroy', () => {
@@ -109,17 +110,15 @@ function createModels(this: Vue, context: InstallContext) {
 
   if (this === this.$root) {
     const globalModels = context.installOptions.globalModels
-    Object.values(globalModels).forEach(m => m.modelId = 'global')
+    Object.values(globalModels).forEach(m => (m.modelId = 'global'))
     models = Object.assign({}, globalModels, models)
   }
 
   this.$modelsProvidedKeys = Object.keys(models)
 
-  Object
-    .entries(models)
-    .forEach(([key, options]) => {
-      createModel.call(this, context, key, options)
-    })
+  Object.entries(models).forEach(([key, options]) => {
+    createModel.call(this, context, key, options)
+  })
 }
 
 export default {
@@ -127,17 +126,22 @@ export default {
     vue: VueConstructor,
     rawInstallOptions: Partial<ModelInstallOptions> = {},
   ) {
-    const installOptions: ModelInstallOptions = Object.assign({}, OPTIONS_DEFAULTS, rawInstallOptions)
+    const installOptions: ModelInstallOptions = Object.assign(
+      {},
+      OPTIONS_DEFAULTS,
+      rawInstallOptions,
+    )
 
     vue.mixin({
       beforeCreate(this: Vue) {
         const { modelRegistry, injectModels } = this.$options
-        this.$modelRegistry = this === this.$root
-          ? (modelRegistry || new Registry(installOptions.restoreOnReplace))
-          : this.$root.$modelRegistry
+        this.$modelRegistry =
+          this === this.$root
+            ? modelRegistry || new Registry(installOptions.restoreOnReplace)
+            : this.$root.$modelRegistry
 
         if (injectModels) {
-          injectModels.forEach((inject) => {
+          injectModels.forEach(inject => {
             resolveInjection.call(this, inject)
           })
         }
