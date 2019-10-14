@@ -55,7 +55,7 @@
     "tslint": "5.19.0",
     "tslint-config-airbnb": "5.11.1",
     "tslint-config-prettier": "1.18.0",
-    "typescript": "3.6.2",
+    "typescript": "3.6.4",
     "vue": "2.6.10",
     "vue-template-compiler": "2.6.10"
   },
