@@ -2,8 +2,8 @@ import { Vue } from 'vue/types/vue'
 import { Export } from './types'
 
 export interface ExportStateOptions {
-  filterDefault?: boolean,
-  context?: any,
+  filterDefault?: boolean
+  context?: any
 }
 
 /**
@@ -14,8 +14,7 @@ export default class Registry {
   public models: { [key: string]: Vue } = {}
   private hydrationData: { [key: string]: () => object } = {}
 
-  constructor(private readonly restoreOnReplace: boolean) {
-  }
+  constructor(private readonly restoreOnReplace: boolean) {}
 
   register(vm: Vue) {
     const current = this.models[vm.$options.modelGId!]
@@ -35,11 +34,10 @@ export default class Registry {
     }
   }
 
-  exportState(
-    {
-      filterDefault = true,
-      context,
-    }: ExportStateOptions = {}): Export {
+  exportState({
+    filterDefault = true,
+    context,
+  }: ExportStateOptions = {}): Export {
     const mapped: Export = {}
 
     Object.entries(this.models)
@@ -61,10 +59,9 @@ export default class Registry {
   }
 
   importState(hydrModels: Export) {
-    Object.keys(hydrModels)
-      .forEach((key) => {
-        this.hydrationData[key] = () => JSON.parse(hydrModels[key])
-      })
+    Object.keys(hydrModels).forEach(key => {
+      this.hydrationData[key] = () => JSON.parse(hydrModels[key])
+    })
   }
 
   getImportedStateFor(modelGId: string): (() => object) | undefined {

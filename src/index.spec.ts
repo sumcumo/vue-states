@@ -1,7 +1,4 @@
-import {
-  createLocalVue,
-  mount,
-} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import VueStates from './index'
@@ -53,21 +50,19 @@ const models = {
   SomeStatelessModel,
 }
 
-const provideComponent = (renderedComponent: any) => ({
-  name: 'ProviderComponent',
-  models,
-  render(h: any) {
-    return h(renderedComponent)
-  },
-} as any)
+const provideComponent = (renderedComponent: any) =>
+  ({
+    name: 'ProviderComponent',
+    models,
+    render(h: any) {
+      return h(renderedComponent)
+    },
+  } as any)
 
 const consumerComponent = {
   name: 'ConsumerComponent',
   injectModels: ['SomeModel'],
-  render(
-    this: any,
-    h: any,
-  ) {
+  render(this: any, h: any) {
     return h('div', { domProps: { id: 'fooContainer' } }, this.SomeModel.foo)
   },
 }
@@ -110,7 +105,9 @@ describe('Vue States', () => {
   })
 
   it('should provide models down the tree', () => {
-    expect((wrapper.find(consumerComponent) as any).vm.SomeModel).toBe(wrapper.vm.SomeModel)
+    expect((wrapper.find(consumerComponent) as any).vm.SomeModel).toBe(
+      wrapper.vm.SomeModel,
+    )
     expect(wrapper.find('#fooContainer').text()).toBe('bar')
   })
 
@@ -124,7 +121,9 @@ describe('Vue States', () => {
       }
     }
 
-    wrapper = mount({ models: { Model: ClassBasedComponent } } as any, { localVue })
+    wrapper = mount({ models: { Model: ClassBasedComponent } } as any, {
+      localVue,
+    })
     const Model = wrapper.vm.Model
     expect(Model.foo).toBe('123')
     Model.changeFoo('456')
@@ -133,7 +132,7 @@ describe('Vue States', () => {
 
   it('should initialize vue subclasses (Vue.extend)', () => {
     // extend twice to make sure multi-level inheritance works as well
-    const classBasedComponent = (Vue.extend({})).extend({
+    const classBasedComponent = Vue.extend({}).extend({
       data() {
         return {
           foo: '123',
@@ -146,7 +145,9 @@ describe('Vue States', () => {
       },
     })
 
-    wrapper = mount({ models: { Model: classBasedComponent } } as any, { localVue })
+    wrapper = mount({ models: { Model: classBasedComponent } } as any, {
+      localVue,
+    })
     const Model = wrapper.vm.Model
     expect(Model.foo).toBe('123')
     Model.changeFoo('456')
@@ -162,7 +163,9 @@ describe('Vue States', () => {
     }
     wrapper = mount(provideComponent(middleComponent), { localVue })
 
-    expect((wrapper.find(consumerComponent) as any).vm.SomeModel).toBe(wrapper.vm.SomeModel)
+    expect((wrapper.find(consumerComponent) as any).vm.SomeModel).toBe(
+      wrapper.vm.SomeModel,
+    )
     expect(wrapper.find('#fooContainer').text()).toBe('bar')
   })
 
@@ -174,10 +177,7 @@ describe('Vue States', () => {
   it('should resolve circular dependencies between siblings', () => {
     wrapper = mount(
       {
-        render(
-          this: any,
-          h: Function,
-        ) {
+        render(this: any, h: Function) {
           return h('div', this.SiblingOne.oneData)
         },
         models: {
@@ -212,7 +212,9 @@ describe('Vue States', () => {
       {
         props: ['someKey'],
         models(this: any) {
-          return { Dynamic: Object.assign({}, SomeModel, { modelId: this.someKey }) }
+          return {
+            Dynamic: Object.assign({}, SomeModel, { modelId: this.someKey }),
+          }
         },
         render(this: any, h: Function) {
           return h('div', this.Dynamic.foo)
@@ -226,7 +228,9 @@ describe('Vue States', () => {
       },
     )
 
-    expect(Object.keys(wrapper.vm.$modelRegistry.models)).toEqual(['Dynamic~uniqueIdentifier123'])
+    expect(Object.keys(wrapper.vm.$modelRegistry.models)).toEqual([
+      'Dynamic~uniqueIdentifier123',
+    ])
     expect(wrapper.vm.Dynamic.$options.modelId).toBe('uniqueIdentifier123')
     expect(wrapper.text()).toBe('bar')
   })
@@ -252,35 +256,39 @@ describe('Vue States', () => {
             ],
           },
         },
-        render(
-          this: any,
-          h: Function,
-        ) {
+        render(this: any, h: Function) {
           return h(
             'div',
-            [this.Simple.foo, this.Simple.$options.someProp, this.Simple.$options.someOtherProp].join(
-              ','),
+            [
+              this.Simple.foo,
+              this.Simple.$options.someProp,
+              this.Simple.$options.someOtherProp,
+            ].join(','),
           )
         },
       } as any,
       { localVue: localVueWithMixins },
     )
 
-    expect(wrapper.text()).toBe(['bar', 'has_an_installed_mixin', 'has_a_local_mixin'].join(','))
+    expect(wrapper.text()).toBe(
+      ['bar', 'has_an_installed_mixin', 'has_a_local_mixin'].join(','),
+    )
   })
 
   it('should create a $modelRegistry property on every instance', () => {
     expect(wrapper.vm.$modelRegistry).toBeInstanceOf(Registry)
-    expect((wrapper.find(consumerComponent) as any).vm.$modelRegistry).toBe(wrapper.vm.$modelRegistry)
+    expect((wrapper.find(consumerComponent) as any).vm.$modelRegistry).toBe(
+      wrapper.vm.$modelRegistry,
+    )
   })
 
   it('should register every created model', () => {
     const { models } = wrapper.vm.$modelRegistry
-    expect(Object.keys(models)).toEqual(
-      ['SomeModel~someId',
-        'SomeSingleModel~single',
-        'SomeStatelessModel~single',
-      ])
+    expect(Object.keys(models)).toEqual([
+      'SomeModel~someId',
+      'SomeSingleModel~single',
+      'SomeStatelessModel~single',
+    ])
     expect(models['SomeModel~someId']).toBe(wrapper.vm.SomeModel)
     expect(models['SomeSingleModel~single']).toBe(wrapper.vm.SomeSingleModel)
   })
@@ -306,15 +314,14 @@ describe('Vue States', () => {
     // @ts-ignore
     expect(Object.keys(modelRegistry.hydrationData)).toHaveLength(3)
 
-    const hydratedWrapper = mount(
-      provideComponent(consumerComponent),
-      {
-        localVue,
-        parentComponent: { modelRegistry } as any,
-      },
-    )
+    const hydratedWrapper = mount(provideComponent(consumerComponent), {
+      localVue,
+      parentComponent: { modelRegistry } as any,
+    })
 
-    expect(Object.is((hydratedWrapper.vm as any).$modelRegistry, modelRegistry)).toBe(true)
+    expect(
+      Object.is((hydratedWrapper.vm as any).$modelRegistry, modelRegistry),
+    ).toBe(true)
 
     // soft proof, that client and server-side are not accidentally connected
     wrapper.vm.SomeModel.foo = 'otherOtherValue'
@@ -331,13 +338,10 @@ describe('Vue States', () => {
       const modelRegistry = new Registry(restoreOnReplace)
 
       function mountModel() {
-        return (mount(
-          provideComponent(consumerComponent),
-          {
-            localVue,
-            parentComponent: { modelRegistry } as any,
-          },
-        ).vm as any).SomeModel
+        return (mount(provideComponent(consumerComponent), {
+          localVue,
+          parentComponent: { modelRegistry } as any,
+        }).vm as any).SomeModel
       }
 
       const initialModel = mountModel()
