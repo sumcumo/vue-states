@@ -169,8 +169,9 @@ describe('Vue States', () => {
     expect(wrapper.find('#fooContainer').text()).toBe('bar')
   })
 
-  it('should be reactive to updates inside the model', () => {
+  it('should be reactive to updates inside the model', async () => {
     wrapper.vm.SomeModel.foo = 'otherValue'
+    await Vue.nextTick()
     expect(wrapper.find('#fooContainer').text()).toBe('otherValue')
   })
 
@@ -298,7 +299,7 @@ describe('Vue States', () => {
     expect(Object.keys(wrapper.vm.$modelRegistry.models)).toHaveLength(0)
   })
 
-  it('should use imported state if provided', () => {
+  it('should use imported state if provided', async () => {
     // this is executed server-side
     wrapper.vm.SomeModel.foo = 'otherValue'
 
@@ -325,6 +326,7 @@ describe('Vue States', () => {
 
     // soft proof, that client and server-side are not accidentally connected
     wrapper.vm.SomeModel.foo = 'otherOtherValue'
+    await Vue.nextTick()
 
     expect(wrapper.find('#fooContainer').text()).toBe('otherOtherValue')
     expect(hydratedWrapper.find('#fooContainer').text()).toBe('otherValue')
