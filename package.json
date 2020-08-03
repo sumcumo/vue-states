@@ -35,7 +35,7 @@
   "author": "sum.cumo GmbH",
   "license": "Apache-2.0",
   "dependencies": {
-    "vue-class-component": "^7.2.4"
+    "vue-class-component": "^7.2.5"
   },
   "devDependencies": {
     "@commitlint/cli": "9.1.2",
